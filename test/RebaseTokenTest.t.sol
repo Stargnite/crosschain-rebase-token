@@ -156,5 +156,4 @@ contract RebaseTokenTest is Test {
         assertEq(rebaseToken.getInterestRate(), initialInterestRate);
     }
 
-    function 
 }
