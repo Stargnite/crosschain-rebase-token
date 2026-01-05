@@ -117,14 +117,14 @@ contract RebaseTokenTest is Test {
 
     function testCannotSetInterestRate(uint256 newInterestRate) public {
         vm.prank(user);
-        vm.expectPartialRevert(bytes4(Ownable.OwnableUnauthorizedAccount.selector));
+        vm.expectPartialRevert(Ownable.OwnableUnauthorizedAccount.selector);
         rebaseToken.setInterestRate(newInterestRate);
     }
 
     function testCannotCallMintAndBurn() public {
         vm.prank(user);
         vm.expectPartialRevert(IAccessControl.AccessControlUnauthorizedAccount.selector);
-        rebaseToken.mint(user, 100);
+        rebaseToken.mint(user, 100, rebaseToken.getInterestRate());
 
         vm.prank(user);
         vm.expectPartialRevert(IAccessControl.AccessControlUnauthorizedAccount.selector);
@@ -140,7 +140,6 @@ contract RebaseTokenTest is Test {
 
         vm.warp(block.timestamp + 1 days);
         assertEq(rebaseToken.principleBalanceOf(user), amount);
-
     }
 
     function testGetRebaseTokenAddress() public {
@@ -155,5 +154,4 @@ contract RebaseTokenTest is Test {
         rebaseToken.setInterestRate(newInterestRate);
         assertEq(rebaseToken.getInterestRate(), initialInterestRate);
     }
-
 }
